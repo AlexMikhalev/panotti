@@ -19,12 +19,13 @@ from panotti.datautils import *
 import os
 from os.path import isfile
 from timeit import default_timer as timer
-from panotti.multi_gpu import MultiGPUModelCheckpoint
+# from panotti.multi_gpu import MultiGPUModelCheckpoint
 
 
 def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epochs=50, batch_size=20, val_split=0.25,tile=False):
     np.random.seed(1)
-
+    from keras import backend as K
+    print("GPU available ", K.tensorflow_backend._get_available_gpus())
     # Get the data
     X_train, Y_train, paths_train, class_names = build_dataset(path=classpath, batch_size=batch_size, tile=tile)
 
