@@ -33,7 +33,12 @@ def MyCNN_Keras2(X_shape, nb_classes, nb_layers=4):
     #    nb_layers = number of conv-pooling sets in the CNN
     from keras import backend as K
     K.set_image_data_format('channels_last')                   # SHH changed on 3/1/2018 b/c tensorflow prefers channels_last
-
+    # prevent TF from consuming whole memory in GPU
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    sess = tf.Session(config=config)
+    K.set_session(sess)
+    
     nb_filters = 32  # number of convolutional filters = "feature maps"
     kernel_size = (3, 3)  # convolution kernel size
     pool_size = (2, 2)  # size of pooling area for max pooling
