@@ -36,7 +36,7 @@ def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epoch
     sparse_categorical = 0
     n_epochs = [100, 100, 100]  ## DNN-RNN-CNN
     Random_Deep = [3, 3, 3]  ## DNN-RNN-CNN
-    RMDL.Image_Classification(X_train, Y_train, X_test, Y_test, batch_size, shape, sparse_categorical, Random_Deep,
+    RMDL_Image.Image_Classification(X_train, Y_train, X_test, Y_test, batch_size, shape, sparse_categorical, Random_Deep,
                         n_epochs)
 
     assert( class_names == class_names_test )
