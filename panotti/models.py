@@ -209,7 +209,7 @@ def setup_model(X, class_names, nb_layers=4, try_checkpoint=True,
     # prevent TF from consuming whole memory in GPU
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
-    config.gpu_options.per_process_gpu_memory_fraction = 0.7
+    config.gpu_options.per_process_gpu_memory_fraction = 0.9
     sess = tf.Session(config=config)
     K.set_session(sess)
 
