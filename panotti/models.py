@@ -17,6 +17,7 @@ from keras.layers import Convolution2D, MaxPooling2D, Flatten, Conv2D
 from keras.layers.normalization import BatchNormalization
 from keras.layers.advanced_activations import ELU
 from keras.optimizers import SGD, Adam
+from keras import backend as K
 
 from os.path import isfile
 from panotti.multi_gpu import *
@@ -31,13 +32,8 @@ def MyCNN_Keras2(X_shape, nb_classes, nb_layers=4):
     #    X_shape = [ # spectrograms per batch, # audio channels, # spectrogram freq bins, # spectrogram time bins ]
     #    nb_classes = number of output n_classes
     #    nb_layers = number of conv-pooling sets in the CNN
-    from keras import backend as K
+    
     K.set_image_data_format('channels_last')                   # SHH changed on 3/1/2018 b/c tensorflow prefers channels_last
-    # prevent TF from consuming whole memory in GPU
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
-    K.set_session(sess)
     
     nb_filters = 32  # number of convolutional filters = "feature maps"
     kernel_size = (3, 3)  # convolution kernel size
@@ -210,6 +206,12 @@ def setup_model(X, class_names, nb_layers=4, try_checkpoint=True,
          the serial & parallel versions will always share the same weights
          (Strange but true!)
     '''
+    # prevent TF from consuming whole memory in GPU
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    config.gpu_options.per_process_gpu_memory_fraction = 0.7
+    sess = tf.Session(config=config)
+    K.set_session(sess)
 
     # Here's where one might 'swap out' different neural network 'model' choices
     serial_model = MyCNN_Keras2(X.shape, nb_classes=len(class_names), nb_layers=nb_layers)
