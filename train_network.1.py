@@ -49,7 +49,7 @@ def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epoch
                          sparse_categorical=False, random_deep=Random_Deep, epochs=n_epochs, plot=True,
                          min_hidden_layer_dnn=1, max_hidden_layer_dnn=8, min_nodes_dnn=128, max_nodes_dnn=1024,
                          min_hidden_layer_rnn=1, max_hidden_layer_rnn=5, min_nodes_rnn=32, max_nodes_rnn=128,
-                         min_hidden_layer_cnn=3, max_hidden_layer_cnn=10, min_nodes_cnn=128, max_nodes_cnn=512,
+                         min_hidden_layer_cnn=3, max_hidden_layer_cnn=32, min_nodes_cnn=128, max_nodes_cnn=512,
                          random_state=np.random.seed(1), random_optimizor=True, dropout=0.6)
 
     
