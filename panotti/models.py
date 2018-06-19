@@ -206,12 +206,7 @@ def setup_model(X, class_names, nb_layers=4, try_checkpoint=True,
          the serial & parallel versions will always share the same weights
          (Strange but true!)
     '''
-    # prevent TF from consuming whole memory in GPU
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    config.gpu_options.per_process_gpu_memory_fraction = 0.9
-    sess = tf.Session(config=config)
-    K.set_session(sess)
+
 
     # Here's where one might 'swap out' different neural network 'model' choices
     serial_model = MyCNN_Keras2(X.shape, nb_classes=len(class_names), nb_layers=nb_layers)

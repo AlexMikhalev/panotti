@@ -25,6 +25,14 @@ from timeit import default_timer as timer
 def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epochs=50, batch_size=20, val_split=0.25,tile=False):
     np.random.seed(1)
     from keras import backend as K
+    # prevent TF from consuming whole memory in GPU
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    config.gpu_options.per_process_gpu_memory_fraction = 0.9
+    sess = tf.Session(config=config)
+    K.set_session(sess)
+    K.set_image_data_format('channels_last') #make sure we use current 
+
     print("GPU available ", K.tensorflow_backend._get_available_gpus())
     # Get the data
     X_train, Y_train, paths_train, class_names = build_dataset(path=classpath, batch_size=batch_size, tile=tile)
@@ -33,13 +41,17 @@ def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epoch
     # Score the model against Test dataset
     X_test, Y_test, paths_test, class_names_test  = build_dataset(path=classpath+"../Test/", tile=tile)
     shape=get_sample_dimensions(class_names,path=classpath)
-    sparse_categorical = 0
     n_epochs = [100, 100, 100]  ## DNN-RNN-CNN
     Random_Deep = [3, 3, 3]  ## DNN-RNN-CNN
-    RMDL_Image.Image_Classification(X_train, Y_train, X_test, Y_test, batch_size, shape, sparse_categorical, Random_Deep,
-                        n_epochs)
-
     assert( class_names == class_names_test )
+    RMDL_Image.Image_Classification(X_train, Y_train, X_test, Y_test, shape, batch_size=batch_size,
+                         sparse_categorical=False, random_deep=Random_Deep, epochs=n_epochs, plot=True,
+                         min_hidden_layer_dnn=1, max_hidden_layer_dnn=8, min_nodes_dnn=128, max_nodes_dnn=1024,
+                         min_hidden_layer_rnn=1, max_hidden_layer_rnn=5, min_nodes_rnn=32, max_nodes_rnn=128,
+                         min_hidden_layer_cnn=3, max_hidden_layer_cnn=10, min_nodes_cnn=128, max_nodes_cnn=512,
+                         random_state=np.random.seed(1), random_optimizor=True, dropout=0.6)
+
+    
 
 
 
