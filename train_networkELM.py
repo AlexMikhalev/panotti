@@ -13,7 +13,7 @@ Trained using Fraunhofer IDMT's database of monophonic guitar effects,
 from __future__ import print_function
 import numpy as np
 import librosa
-from models import ELM 
+from panotti.models import ELM 
 from panotti.datautils import *
 import tensorflow as tf
 #from keras.callbacks import ModelCheckpoint #,EarlyStopping
