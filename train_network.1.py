@@ -15,6 +15,7 @@ import numpy as np
 import librosa
 from RMDL import RMDL_Image
 from panotti.datautils import *
+import tensorflow as tf
 #from keras.callbacks import ModelCheckpoint #,EarlyStopping
 import os
 from os.path import isfile
