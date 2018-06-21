@@ -62,8 +62,8 @@ def convert_one_file(printevery, class_index, class_files, nb_classes, classname
     shape = get_canonical_shape(signal)     # either the signal shape or a leading one
     if (shape != signal.shape):             # this only evals to true for mono
         signal = np.reshape(signal, shape)
-        #print("...reshaped mono so new shape = ",signal.shape, end="")
-    #print(",  max_shape = ",max_shape,end="")
+        print("...reshaped mono so new shape = ",signal.shape, end="")
+    print(",  max_shape = ",max_shape,end="")
     padded_signal = np.zeros(max_shape)     # (previously found max_shape) allocate a long signal of zeros
     use_shape = list(max_shape[:])
     use_shape[0] = min( shape[0], max_shape[0] )
