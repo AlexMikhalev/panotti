@@ -42,16 +42,11 @@ def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epoch
     # Score the model against Test dataset
     X_test, Y_test, paths_test, class_names_test  = build_dataset(path=classpath+"../Test/", tile=tile)
     shape=get_sample_dimensions(class_names,path=classpath)
-    n_epochs = [100, 100, 100]  ## DNN-RNN-CNN
-    Random_Deep = [3, 3, 3]  ## DNN-RNN-CNN
+    n_epochs = [200, 200, 500]  ## DNN-RNN-CNN
+    Random_Deep = [0, 0, 3]  ## DNN-RNN-CNN
     assert( class_names == class_names_test )
     RMDL_Image.Image_Classification(X_train, Y_train, X_test, Y_test, shape, batch_size=batch_size,
-                         sparse_categorical=False, random_deep=Random_Deep, epochs=n_epochs, plot=True,
-                         min_hidden_layer_dnn=1, max_hidden_layer_dnn=8, min_nodes_dnn=128, max_nodes_dnn=1024,
-                         min_hidden_layer_rnn=1, max_hidden_layer_rnn=5, min_nodes_rnn=32, max_nodes_rnn=128,
-                         min_hidden_layer_cnn=3, max_hidden_layer_cnn=32, min_nodes_cnn=128, max_nodes_cnn=512,
-                         random_state=np.random.seed(1), random_optimizor=True, dropout=0.6)
-
+                         sparse_categorical=True, random_deep=Random_Deep, epochs=n_epochs, plot=True)
     
 
 
