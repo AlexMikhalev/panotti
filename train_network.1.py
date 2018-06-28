@@ -13,11 +13,12 @@ Trained using Fraunhofer IDMT's database of monophonic guitar effects,
 from __future__ import print_function
 import numpy as np
 import librosa
+
+
+from RMDL import RMDL_Image
 from panotti.models import *
 from panotti.datautils import *
 
-from RMDL import RMDL_Image
-from panotti.datautils import *
 import tensorflow as tf
 #from keras.callbacks import ModelCheckpoint #,EarlyStopping
 import os
@@ -30,9 +31,9 @@ def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epoch
     np.random.seed(1)
     from keras import backend as K
     # prevent TF from consuming whole memory in GPU
-    config = tf.ConfigProto()
+    config = tf.ConfigProto(device_count = {'GPU': 1})
     config.gpu_options.allow_growth = True
-    config.gpu_options.per_process_gpu_memory_fraction = 0.9
+    # config.gpu_options.per_process_gpu_memory_fraction = 0.9
     sess = tf.Session(config=config)
     K.set_session(sess)
     K.set_image_data_format('channels_last') #make sure we use current 
