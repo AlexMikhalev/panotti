@@ -30,6 +30,7 @@ from timeit import default_timer as timer
 def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epochs=50, batch_size=20, val_split=0.25,tile=False):
     np.random.seed(1)
     from keras import backend as K
+    print("GPU available ", K.tensorflow_backend._get_available_gpus())
     # prevent TF from consuming whole memory in GPU
     config = tf.ConfigProto(device_count = {'GPU': 1})
     config.gpu_options.allow_growth = True
@@ -38,7 +39,7 @@ def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epoch
     K.set_session(sess)
     K.set_image_data_format('channels_last') #make sure we use current 
 
-    print("GPU available ", K.tensorflow_backend._get_available_gpus())
+    
     # Get the data
     X_train, Y_train, paths_train, class_names = build_dataset(path=classpath, batch_size=batch_size, tile=tile)
 
