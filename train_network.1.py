@@ -13,6 +13,9 @@ Trained using Fraunhofer IDMT's database of monophonic guitar effects,
 from __future__ import print_function
 import numpy as np
 import librosa
+from panotti.models import *
+from panotti.datautils import *
+
 from RMDL import RMDL_Image
 from panotti.datautils import *
 import tensorflow as tf
