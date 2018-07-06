@@ -65,6 +65,8 @@ def save_melgram(outfile, melgram, out_format='npz'):
             imageio.imwrite(outfile, melgram, format=out_format)
             return
     elif (out_format == 'png'):
+        # normalise before saving:
+
         imageio.imwrite(outfile, melgram, format=out_format)
     elif ('npy' == out_format):
         np.save(outfile, melgram=melgram)
@@ -209,13 +211,13 @@ def build_dataset(path="Preproc/Train/", load_frac=1.0, batch_size=None, tile=Fa
     print("total files = ",total_files,", going to load total_load = ",total_load)
 
     # pre-allocate memory for speed (old method used np.concatenate, slow)
-    mel_dims = get_sample_dimensions(class_names,path=path)  # get dims of sample data file
+    mel_dims = get_sample_dimensions(class_names, path=path)  # get dims of sample data file
     if (tile):
         ldims = list(mel_dims)
         ldims[3] = 3
         mel_dims = tuple(ldims)
     print(" melgram dimensions: ",mel_dims)
-    X = np.zeros((total_load, mel_dims[1], mel_dims[2], mel_dims[3]))
+    X = np.zeros((total_load, mel_dims[1], mel_dims[0], mel_dims[1]))
     Y = np.zeros((total_load, nb_classes))
     paths = []
 
