@@ -67,11 +67,8 @@ RUN conda install -y python=${python_version} && \
       pyyaml \
       scikit-learn \
       six \
-      ffmpeg \
-      theano && \
-    git clone git://github.com/keras-team/keras.git /src && pip install -e /src[tests] && \
-    pip install git+git://github.com/keras-team/keras.git && \ 
-    pip install lazy librosa editdistance h5py pyaudio && \
+      ffmpeg &&\
+    pip install lazy librosa editdistance h5py pyaudio keras==2.1.6 && \
     pip install git+https://github.com/AlexMikhalev/panotti.git --upgrade --no-deps && \
     conda clean -yt
 
@@ -87,4 +84,4 @@ WORKDIR /src
 
 EXPOSE 8888
 
-CMD jupyter notebook --port=8888 --ip=0.0.0.0
+CMD jupyter notebook --port=8888 --ip=0.0.0.0 

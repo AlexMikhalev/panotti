@@ -6,7 +6,7 @@ import numpy as np
 import librosa
 import os
 from os.path import isfile, splitext
-from imageio import imread, imwrite
+import imageio
 import glob
 
 def listdir_nohidden(path,subdirs_only=False, skip_csv=True):
@@ -39,25 +39,37 @@ def get_total_files(class_names, path="Preproc/Train/"):
         sum_total += n_files
     return sum_total
 
+
 def save_melgram(outfile, melgram, out_format='npz'):
     channels = melgram.shape[1]
-    melgram = melgram.astype(np.float16)
+    print ("Break this thing #####")
+    print("Melgram shape ", melgram.shape)
+    print("Output format ", out_format)
+    print("Output file", outfile)
+    print("Channels ", channels)
+    print ("Melgram dtype", melgram.dtype)
+    melgram = melgram.astype(np.float16) 
     if (('jpeg' == out_format) or ('png' == out_format)) and (channels <=4):
         melgram = np.moveaxis(melgram, 1, 3).squeeze()      # we use the 'channels_first' in tensorflow, but images have channels_first. squeeze removes unit-size axes
         melgram = np.flip(melgram, 0)    # flip spectrogram image right-side-up before saving, for viewing
-        #print("first melgram.shape = ",melgram.shape,end="")
+        print("first melgram.shape = ",melgram.shape)
         if (2 == channels): # special case: 1=greyscale, 3=RGB, 4=RGBA, ..no 2.  so...?
             # pad a channel of zeros (for blue) and you'll just be stuck with it forever. so channels will =3
             # TODO: this is SLOWWW
             b = np.zeros((melgram.shape[0], melgram.shape[1], 3))  # 3-channel array of zeros
             b[:,:,:-1] = melgram                          # fill the zeros on the 1st 2 channels
-            imwrite(outfile, b, format=out_format)
+            imageio.imwrite(outfile, b, format=out_format)
+            return
         else:
-            imwrite(outfile, melgram, format=out_format)
+            print("Writing image files", outfile)
+            imageio.imwrite(outfile, melgram, format=out_format)
+            return
+    elif (out_format == 'png'):
+        imageio.imwrite(outfile, melgram, format=out_format)
     elif ('npy' == out_format):
-        np.save(outfile,melgram=melgram)
+        np.save(outfile, melgram=melgram)
     else:
-        np.savez_compressed(outfile,melgram=melgram)    # default is compressed npz file
+        np.savez_compressed(outfile, melgram=melgram)    # default is compressed npz file
     return
 
 
@@ -87,11 +99,10 @@ def load_melgram(file_path):
         with np.load(file_path) as data:
             melgram = data['melgram']
     elif ('.png' == extension) or ('.jpeg' == extension):
-        arr = imread(file_path)
-        melgram = np.reshape(arr, (1,1,arr.shape[0],arr.shape[1]))  # convert 2-d image
-        melgram = np.flip(melgram, 0)     # we save images 'rightside up' but librosa internally presents them 'upside down'
+        arr = imageio.imread(file_path)
+        return arr
     else:
-        print("load_melgram: Error: unrecognized file extension '",extension,"' for file ",file_path,sep="")
+        print("load_melgram: Error: unrecognized file extension '", extension,"' for file ", file_path,sep="")
     return melgram
 
 
@@ -137,7 +148,7 @@ def make_melgram(mono_sig, sr, n_mels=128):   # @keunwoochoi upgraded form 96 to
     #    sr=sr, n_mels=96),ref_power=1.0)[np.newaxis,np.newaxis,:,:]
 
     melgram = librosa.amplitude_to_db(librosa.feature.melspectrogram(mono_sig,
-        sr=sr, n_mels=n_mels))[np.newaxis,:,:,np.newaxis]     # last newaxis is b/c tensorflow wants 'channels_last' order
+        sr=sr, n_mels=n_mels)).T     # for TF we need to transpose melgram
 
     '''
     # librosa docs also include a perceptual CQT example:
