@@ -152,7 +152,7 @@ def make_melgram(mono_sig, sr, n_mels=128):   # @keunwoochoi upgraded form 96 to
     #    sr=sr, n_mels=96),ref_power=1.0)[np.newaxis,np.newaxis,:,:]
 
     melgram = librosa.amplitude_to_db(librosa.feature.melspectrogram(mono_sig,
-        sr=sr, n_mels=n_mels)).T     # for TF we need to transpose melgram
+        sr=sr, n_mels=n_mels)).[np.newaxis,:,:,np.newaxis]     # for TF we need to melgram
 
     '''
     # librosa docs also include a perceptual CQT example:
