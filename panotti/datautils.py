@@ -102,7 +102,8 @@ def load_melgram(file_path):
             melgram = data['melgram']
     elif ('.png' == extension) or ('.jpeg' == extension):
         arr = imageio.imread(file_path)
-        return arr
+        melgram = np.reshape(arr, (1,1,arr.shape[0],arr.shape[1]))
+        return melgram
     else:
         print("load_melgram: Error: unrecognized file extension '", extension,"' for file ", file_path,sep="")
     return melgram
@@ -217,7 +218,7 @@ def build_dataset(path="Preproc/Train/", load_frac=1.0, batch_size=None, tile=Fa
         ldims[3] = 3
         mel_dims = tuple(ldims)
     print(" melgram dimensions: ",mel_dims)
-    X = np.zeros((total_load, 1, mel_dims[0], mel_dims[1]))
+    X = np.zeros((total_load, mel_dims[1], mel_dims[2], mel_dims[3]))
     Y = np.zeros((total_load, nb_classes))
     paths = []
 
