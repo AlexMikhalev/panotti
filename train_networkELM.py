@@ -45,10 +45,10 @@ def train_network(weights_file="weights.hdf5", classpath="Preproc/Train/", epoch
 
     assert( class_names == class_names_test )
     # Construct ELM
-    hidden_num = 150
+    hidden_num = 250
     print("batch_size : {}".format(batch_size))
     print("hidden_num : {}".format(hidden_num))
-    elm = ELM(sess, batch_size, 784, hidden_num, 10)
+    elm = ELM(sess, batch_size, shape[0], hidden_num, len(class_names))
     elm.feed(X_train, Y_train)
     # testing
     elm.test(X_test, Y_test)
