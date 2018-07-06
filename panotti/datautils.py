@@ -102,9 +102,7 @@ def load_melgram(file_path):
             melgram = data['melgram']
     elif ('.png' == extension) or ('.jpeg' == extension):
         arr = imageio.imread(file_path)
-        melgram = np.reshape(arr, (1,1,arr.shape[0],arr.shape[1]))
-        melgram = np.flip(melgram, 0)
-        return melgram
+        return arr
     else:
         print("load_melgram: Error: unrecognized file extension '", extension,"' for file ", file_path,sep="")
     return melgram
@@ -151,8 +149,7 @@ def make_melgram(mono_sig, sr, n_mels=128):   # @keunwoochoi upgraded form 96 to
     #melgram = librosa.logamplitude(librosa.feature.melspectrogram(mono_sig,  # latest librosa deprecated logamplitude in favor of amplitude_to_db
     #    sr=sr, n_mels=96),ref_power=1.0)[np.newaxis,np.newaxis,:,:]
 
-    melgram = librosa.amplitude_to_db(librosa.feature.melspectrogram(mono_sig, sr=sr, n_mels=n_mels))[np.newaxis,:,:,np.newaxis]    # for TF we need to melgram
-
+    melgram = librosa.amplitude_to_db(librosa.feature.melspectrogram(mono_sig, sr=sr, n_mels=n_mels)).T
     '''
     # librosa docs also include a perceptual CQT example:
     CQT = librosa.cqt(mono_sig, sr=sr, fmin=librosa.note_to_hz('A1'))
