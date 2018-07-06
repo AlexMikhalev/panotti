@@ -103,6 +103,7 @@ def load_melgram(file_path):
     elif ('.png' == extension) or ('.jpeg' == extension):
         arr = imageio.imread(file_path)
         melgram = np.reshape(arr, (1,1,arr.shape[0],arr.shape[1]))
+        melgram = np.flip(melgram, 0)
         return melgram
     else:
         print("load_melgram: Error: unrecognized file extension '", extension,"' for file ", file_path,sep="")
